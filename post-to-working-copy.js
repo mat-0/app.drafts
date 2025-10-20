@@ -1,10 +1,9 @@
 /*
- * @title: Post to Working Copy
- * @author: Mat B
- * @email: 
- * @notes:
- * creation behind the scenes.
+ * @title: Regular Post to Working Copy
+ * @author: TheChelsUk
+ * @notes: Create markdown blog post in Working Copy
  */
+
 var credential = Credential.create("Jekyll path", "Jekyll path");
 credential.addTextField("jekyll-repo", "Jekyll repo name");
 credential.addTextField("jekyll-path", "Path to your jekyll posts directory");
@@ -27,7 +26,7 @@ if (!result) {
         content = draft.content,
         prompt = Prompt.create(),
         date = new Date(),
-        now = new Date().toISOString().substr(0, 10);
+	now = new Date().toISOString().substr(0, 10);
 
         prompt.title = 'Jekyll post data';
         prompt.message = 'Enter Jekyll post data';
@@ -38,14 +37,16 @@ if (!result) {
         } else {
             prompt.addTextField('title', 'Title', draft.title);
         };
-	
+
+        prompt.addTextField('link', 'Link', '');
+	    prompt.addTextField('cited', 'Cited', '');
         prompt.addTextField('date', 'Date', now);
-       
+
         prompt.addButton('Ok');
         prompt.show();
 
         if (prompt.buttonPressed == "Ok") {
-                        titleArr = prompt.fieldValues['title'].split(' '),
+                titleArr = prompt.fieldValues['title'].split(' '),
                 fileName = now + '-';
 
             // modify the filename to be yyyy-mm-dd-title.md
@@ -55,14 +56,18 @@ if (!result) {
 
             // remove the file name from the draft
             content = content.replace(prompt.fieldValues['title'], '').trim();
-            
+
             // assemble post frontmatter
             newDraft += '---\n';
             newDraft += '\n';
             newDraft += 'layout: post\n'
             newDraft += 'date: ' + prompt.fieldValues['date'] + '\n';
 
+            if (prompt.fieldValues['link'] !== '')
+                newDraft += 'link: ' + prompt.fieldValues['link'] + '\n';
+
             newDraft += 'title: ' + prompt.fieldValues['title'] + '\n';
+            newDraft += 'cited: ' + prompt.fieldValues['cited'] + '\n';
             newDraft += '\n';
             newDraft += '---\n';
             newDraft += '\n';
@@ -72,15 +77,15 @@ if (!result) {
             editor.setText(newDraft);
 
             // send to working copy
-            var baseURL = 'working-copy://x-callback-url/write/?key=' + 
-                          credential.getValue("working-copy-key") + 
-                          '&repo=' + encodeURI(credential.getValue("jekyll-repo")) + 
-                          '&path=' + encodeURI(credential.getValue("jekyll-path")) + 
-                          '/' + 
-                          encodeURI(fileName.toLowerCase()) + 
-                          '&text=' + 
+            var year = new Date().getFullYear().toString(),
+                baseURL = 'working-copy://x-callback-url/write/?key=' +
+                          credential.getValue("working-copy-key") +
+                          '&repo=' + encodeURI(credential.getValue("jekyll-repo")) +
+                          '&path=' + encodeURI(credential.getValue("jekyll-path")) + '/' +  year + '/' +
+                          encodeURI(fileName.toLowerCase()) +
+                          '&text=' +
                           encodeURI(newDraft),
-            cb = CallbackURL.create();
+                cb = CallbackURL.create();
             cb.baseURL = baseURL;
             cb.open();
         };

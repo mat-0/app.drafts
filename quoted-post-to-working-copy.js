@@ -1,10 +1,9 @@
 /*
- * @title: Quote Post to Working Copy.
- * @author: Mat-0
- * @email: 
- * @notes:
- * creation behind the scenes.
+ * @title: Regular Post to Working Copy
+ * @author: TheChelsUk
+ * @notes: Create markdown blog post in Working Copy
  */
+
 var credential = Credential.create("Jekyll path", "Jekyll path");
 credential.addTextField("jekyll-repo", "Jekyll repo name");
 credential.addTextField("jekyll-path", "Path to your jekyll posts directory");
@@ -40,9 +39,9 @@ if (!result) {
         };
 
         prompt.addTextField('link', 'Link', '');
-	prompt.addTextField('cited', 'Cited', '');
+	    prompt.addTextField('cited', 'Cited', '');
         prompt.addTextField('date', 'Date', now);
-       
+
         prompt.addButton('Ok');
         prompt.show();
 
@@ -57,7 +56,7 @@ if (!result) {
 
             // remove the file name from the draft
             content = content.replace(prompt.fieldValues['title'], '').trim();
-            
+
             // assemble post frontmatter
             newDraft += '---\n';
             newDraft += '\n';
@@ -78,15 +77,15 @@ if (!result) {
             editor.setText(newDraft);
 
             // send to working copy
-            var baseURL = 'working-copy://x-callback-url/write/?key=' + 
-                          credential.getValue("working-copy-key") + 
-                          '&repo=' + encodeURI(credential.getValue("jekyll-repo")) + 
-                          '&path=' + encodeURI(credential.getValue("jekyll-path")) + 
-                          '/' + 
-                          encodeURI(fileName.toLowerCase()) + 
-                          '&text=' + 
+            var year = new Date().getFullYear().toString(),
+                baseURL = 'working-copy://x-callback-url/write/?key=' +
+                          credential.getValue("working-copy-key") +
+                          '&repo=' + encodeURI(credential.getValue("jekyll-repo")) +
+                          '&path=' + encodeURI(credential.getValue("jekyll-path")) + '/' +  year + '/' +
+                          encodeURI(fileName.toLowerCase()) +
+                          '&text=' +
                           encodeURI(newDraft),
-            cb = CallbackURL.create();
+                cb = CallbackURL.create();
             cb.baseURL = baseURL;
             cb.open();
         };

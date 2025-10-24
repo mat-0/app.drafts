@@ -80,14 +80,20 @@ if (!result) {
             var year = new Date().getFullYear().toString(),
                 baseURL = 'working-copy://x-callback-url/write/?key=' +
                           credential.getValue("working-copy-key") +
-                          '&repo=' + encodeURI(credential.getValue("jekyll-repo")) +
-                          '&path=' + encodeURI(credential.getValue("jekyll-path")) + '/' +  year + '/' +
-                          encodeURI(fileName.toLowerCase()) +
+                          '&repo=' + encodeURIComponent(credential.getValue("jekyll-repo")) +
+                          '&path=' + encodeURIComponent(credential.getValue("jekyll-path")) + '/' +  year + '/' +
+                          encodeURIComponent(fileName.toLowerCase()) +
                           '&text=' +
-                          encodeURI(newDraft),
+                          encodeURIComponent(newDraft),
                 cb = CallbackURL.create();
             cb.baseURL = baseURL;
-            cb.open();
+            
+            if (cb.open()) {
+                app.displaySuccessMessage('Post created: ' + fileName);
+            } else {
+                app.displayErrorMessage('Failed to send to Working Copy');
+                context.fail();
+            }
         };
     }
 };

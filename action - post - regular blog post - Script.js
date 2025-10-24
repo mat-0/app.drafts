@@ -1,9 +1,7 @@
-/*
- * @title: Regular Post to Working Copy
- * @author: TheChelsUk
- * @notes: Create markdown blog post in Working Copy
+* @title: Jekyll formatting -> Working Copy
+ * @author: TheChelsuk
+ * @notes: creates jekyll md file
  */
-
 var credential = Credential.create("Jekyll path", "Jekyll path");
 credential.addTextField("jekyll-repo", "Jekyll repo name");
 credential.addTextField("jekyll-path", "Path to your jekyll posts directory");
@@ -37,11 +35,9 @@ if (!result) {
         } else {
             prompt.addTextField('title', 'Title', draft.title);
         };
-
-        prompt.addTextField('link', 'Link', '');
-	    prompt.addTextField('cited', 'Cited', '');
+	
         prompt.addTextField('date', 'Date', now);
-
+       
         prompt.addButton('Ok');
         prompt.show();
 
@@ -56,18 +52,14 @@ if (!result) {
 
             // remove the file name from the draft
             content = content.replace(prompt.fieldValues['title'], '').trim();
-
+            
             // assemble post frontmatter
             newDraft += '---\n';
             newDraft += '\n';
             newDraft += 'layout: post\n'
             newDraft += 'date: ' + prompt.fieldValues['date'] + '\n';
 
-            if (prompt.fieldValues['link'] !== '')
-                newDraft += 'link: ' + prompt.fieldValues['link'] + '\n';
-
             newDraft += 'title: ' + prompt.fieldValues['title'] + '\n';
-            newDraft += 'cited: ' + prompt.fieldValues['cited'] + '\n';
             newDraft += '\n';
             newDraft += '---\n';
             newDraft += '\n';
@@ -80,11 +72,11 @@ if (!result) {
             var year = new Date().getFullYear().toString(),
                 baseURL = 'working-copy://x-callback-url/write/?key=' +
                           credential.getValue("working-copy-key") +
-                          '&repo=' + encodeURI(credential.getValue("jekyll-repo")) +
-                          '&path=' + encodeURI(credential.getValue("jekyll-path")) + '/' +  year + '/' +
-                          encodeURI(fileName.toLowerCase()) +
+                          '&repo=' + encodeURIComponent(credential.getValue("jekyll-repo")) +
+                          '&path=' + encodeURIComponent(credential.getValue("jekyll-path")) + '/' +  year + '/' +
+                          encodeURIComponent(fileName.toLowerCase()) +
                           '&text=' +
-                          encodeURI(newDraft),
+                          encodeURIComponent(newDraft),
                 cb = CallbackURL.create();
             cb.baseURL = baseURL;
             cb.open();

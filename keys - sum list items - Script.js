@@ -1,8 +1,9 @@
+
 /*
  * @title: Sum list item costs
  * @author: TheChelsUk
  * @notes: Looks for £xx.xx in markdown rows and adds a total line at the bottom.
- */ 
+ */
 
 let content = draft.content;
 let lines = content.split('\n');
@@ -30,7 +31,7 @@ for (let line of lines) {
     }
 }
 
-// Check if prices found
+// Check if we found any prices
 if (foundPrices === 0) {
     app.displayErrorMessage('No prices found in list items');
     context.fail();

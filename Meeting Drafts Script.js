@@ -3,18 +3,28 @@
 */
 
 // create template
-const template = `# Title
+const template = `# Meeting
 
-> quote
 
-- author
+## Meeting Notes
+
+- Attendees:
+
+#### Notes
+
+
+#### Actions
+-[ ]
+-[ ]
+-[ ]
 
 `;
 
 // create the draft
 var d = Draft.create();
 d.content = template;
-d.addTag("tagname");
+d.addTag("meeting");
+d.addTag("work");
 d.update()
 
 // load in editor and focus for editing

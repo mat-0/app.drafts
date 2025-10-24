@@ -1,9 +1,8 @@
 /*
- * @title: Create front-mattered post in Working Copy
+ * @title: Create mixtape post in Working Copy
  * @author: TheChelsUk
  * @notes: Creates a blog post in working copy based on front matter
  */
-
 
 var credential = Credential.create("Jekyll path", "Jekyll path");
 credential.addTextField("jekyll-repo", "Jekyll repo name");
@@ -35,8 +34,8 @@ if (!result) {
             // Extract front matter content
             var frontMatter = frontMatterMatch[1];
             
-            // Extract title from the front matter
-            var titleMatch = frontMatter.match(/title:\s*["']?(.+?)["']?$/m);
+            // Extract title from the front matter (handles with or without quotes)
+            var titleMatch = frontMatter.match(/title:\s*["']?([^"'\n]+?)["']?\s*$/m);
             if (titleMatch) {
                 title = titleMatch[1].trim();
             }
@@ -69,6 +68,8 @@ if (!result) {
         if (!cb.open()) {
             alert("Failed to send the file to Working Copy.");
             context.cancel("Callback failed.");
+        } else {
+            app.displaySuccessMessage("Post created: " + fileName);
         }
     }
 }

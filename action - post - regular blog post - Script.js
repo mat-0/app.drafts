@@ -35,9 +35,9 @@ if (!result) {
         } else {
             prompt.addTextField('title', 'Title', draft.title);
         };
-	
+
         prompt.addTextField('date', 'Date', now);
-       
+
         prompt.addButton('Ok');
         prompt.show();
 
@@ -52,7 +52,7 @@ if (!result) {
 
             // remove the file name from the draft
             content = content.replace(prompt.fieldValues['title'], '').trim();
-            
+
             // assemble post frontmatter
             newDraft += '---\n';
             newDraft += '\n';

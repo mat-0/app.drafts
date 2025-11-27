@@ -6,14 +6,14 @@
  */
 
 // === GET CREDENTIALS ===
-let credential = Credential.create('OpenWeatherMap', 'Enter your API details');
-credential.addTextField('CITY', 'City Name');
-credential.addPasswordField('API_KEY', 'OpenWeatherMap API Key');
+let credential = Credential.create("OpenWeatherMap", "Enter your API details");
+credential.addTextField("CITY", "City Name");
+credential.addPasswordField("API_KEY", "OpenWeatherMap API Key");
 credential.authorize();
 
-const CITY = credential.getValue('CITY');
-const API_KEY = credential.getValue('API_KEY');
-const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
+const CITY = credential.getValue("CITY");
+const API_KEY = credential.getValue("API_KEY");
+const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 
 // Build API URL
 const url = `${BASE_URL}?q=${CITY}&appid=${API_KEY}&units=metric`;
@@ -22,12 +22,12 @@ const url = `${BASE_URL}?q=${CITY}&appid=${API_KEY}&units=metric`;
 let http = HTTP.create();
 let response = http.request({
     url: url,
-    method: 'GET'
+    method: "GET",
 });
 
 // Check if request was successful
 if (!response.success) {
-    app.displayErrorMessage('Failed to fetch weather data');
+    app.displayErrorMessage("Failed to fetch weather data");
     context.fail();
 }
 
@@ -36,14 +36,19 @@ let data = JSON.parse(response.responseText);
 
 // Check API response code
 if (data.cod !== 200) {
-    app.displayErrorMessage('Weather data not available for ' + CITY);
+    app.displayErrorMessage("Weather data not available for " + CITY);
     context.cancel();
 }
 
 // Get current date
 let now = new Date();
-let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-let outputDate = now.toLocaleDateString('en-GB', options);
+let options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+};
+let outputDate = now.toLocaleDateString("en-GB", options);
 
 // Extract weather data
 let dayTemp = data.main.temp.toFixed(1);
@@ -59,8 +64,14 @@ let humidity = data.main.humidity;
 // Format sunrise and sunset times
 let sunrise = new Date(data.sys.sunrise * 1000);
 let sunset = new Date(data.sys.sunset * 1000);
-let sunriseTime = sunrise.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-let sunsetTime = sunset.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+let sunriseTime = sunrise.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+});
+let sunsetTime = sunset.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+});
 
 // Build markdown output
 let stringToday = `## On ${outputDate}\n\n`;
@@ -72,12 +83,12 @@ stringToday += `- The pressure is ${pressure}hPa and humidity is ${humidity}%\n`
 stringToday += `- The sun will rise at ${sunriseTime} and set at ${sunsetTime}\n`;
 
 // Append to draft
-if (draft.content && draft.content.trim() !== '') {
-    draft.content = draft.content + '\n\n' + stringToday;
+if (draft.content && draft.content.trim() !== "") {
+    draft.content = draft.content + "\n\n" + stringToday;
 } else {
     draft.content = stringToday;
 }
 
 draft.update();
 
-app.displaySuccessMessage('Weather updated for ' + CITY);
+app.displaySuccessMessage("Weather updated for " + CITY);

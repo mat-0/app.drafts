@@ -1,4 +1,3 @@
-
 /*
  * @title: Sum list item costs
  * @author: TheChelsUk
@@ -6,7 +5,7 @@
  */
 
 let content = draft.content;
-let lines = content.split('\n');
+let lines = content.split("\n");
 
 // Regular expression to match prices in various formats
 // Matches: £52.00, £14.99, £7.43, etc.
@@ -18,12 +17,12 @@ let foundPrices = 0;
 // Go through each line and extract prices only from list items
 for (let line of lines) {
     // Check if line starts with - (list item)
-    if (line.trim().startsWith('-')) {
+    if (line.trim().startsWith("-")) {
         let matches = line.match(priceRegex);
         if (matches) {
             for (let match of matches) {
                 // Extract the number part (remove £ symbol)
-                let amount = parseFloat(match.replace('£', ''));
+                let amount = parseFloat(match.replace("£", ""));
                 total += amount;
                 foundPrices++;
             }
@@ -33,7 +32,7 @@ for (let line of lines) {
 
 // Check if we found any prices
 if (foundPrices === 0) {
-    app.displayErrorMessage('No prices found in list items');
+    app.displayErrorMessage("No prices found in list items");
     context.fail();
 }
 
@@ -53,6 +52,6 @@ if (hasDivider && hasTotal) {
 }
 
 // Add new total
-let totalLine = '\n---\nTotal: £' + total.toFixed(2);
+let totalLine = "\n---\nTotal: £" + total.toFixed(2);
 draft.content = content + totalLine;
 draft.update();

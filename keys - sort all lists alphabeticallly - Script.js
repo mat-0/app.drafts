@@ -5,7 +5,7 @@
  */
 
 let content = draft.content;
-let lines = content.split('\n');
+let lines = content.split("\n");
 
 let result = [];
 let currentList = [];
@@ -13,9 +13,9 @@ let currentList = [];
 // Process each line
 for (let i = 0; i < lines.length; i++) {
     let line = lines[i];
-    
+
     // Check if line starts with "- "
-    if (line.trimStart().startsWith('- ')) {
+    if (line.trimStart().startsWith("- ")) {
         currentList.push(line);
     } else {
         // Not a list item - sort and flush current list if it exists
@@ -27,12 +27,12 @@ for (let i = 0; i < lines.length; i++) {
                 let textB = b.trimStart().substring(2).toLowerCase();
                 return textA.localeCompare(textB);
             });
-            
+
             // Add sorted list to result
             result = result.concat(currentList);
             currentList = [];
         }
-        
+
         // Add the non-list line
         result.push(line);
     }
@@ -49,5 +49,5 @@ if (currentList.length > 0) {
 }
 
 // Update the draft with sorted content
-draft.content = result.join('\n');
+draft.content = result.join("\n");
 draft.update();

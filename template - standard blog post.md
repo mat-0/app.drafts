@@ -1,0 +1,3 @@
+# Standard Blog
+
+<|draft content>

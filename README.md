@@ -16,6 +16,10 @@ These actions are shared on the Drafts action directory and can be found here:
 
 - [Drafts action directory search](https://directory.getdrafts.com/search?utf8=%E2%9C%93&q=thechelsuk)
 
+## URL Schemes
+
+See the file [URL-Schemes.md](URL-Schemes.md) for a list of useful Drafts URL schemes used in some of the actions that are not exportable.
+
 ## License
 
 This repository is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
